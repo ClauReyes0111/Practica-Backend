@@ -1,0 +1,136 @@
+// ============================================================
+//  productos.js  →  Nuestro "catálogo" (por ahora, datos en memoria)
+// ============================================================
+//
+// CONCEPTO 1: un ARRAY de OBJETOS.
+//   - Un objeto es un conjunto de pares  clave: valor   → { nombre: "Teclado" }
+//   - Un array es una lista ordenada     → [ {...}, {...}, {...} ]
+//   Esta es LA estructura de datos que vas a usar el 90% del tiempo en JS.
+
+const productos = [
+  {
+    id: 1,
+    nombre: "Teclado mecánico inalámbrico 75%",
+    marca: "Keychron",
+    categoria: "Tecnología",
+    precio: 89.99,
+    precioAnterior: 119.99,
+    rating: 4.6,
+    resenas: 2841,
+    envioGratis: true,
+    imagen: "⌨️",
+  },
+  {
+    id: 2,
+    nombre: "Audífonos con cancelación de ruido",
+    marca: "Sony",
+    categoria: "Tecnología",
+    precio: 248.0,
+    precioAnterior: 299.99,
+    rating: 4.8,
+    resenas: 15230,
+    envioGratis: true,
+    imagen: "🎧",
+  },
+  {
+    id: 3,
+    nombre: "Mouse ergonómico vertical recargable",
+    marca: "Logitech",
+    categoria: "Tecnología",
+    precio: 34.5,
+    precioAnterior: null,
+    rating: 4.3,
+    resenas: 912,
+    envioGratis: false,
+    imagen: "🖱️",
+  },
+  {
+    id: 4,
+    nombre: "Monitor 27 pulgadas 4K IPS",
+    marca: "LG",
+    categoria: "Tecnología",
+    precio: 329.0,
+    precioAnterior: 399.0,
+    rating: 4.5,
+    resenas: 4120,
+    envioGratis: true,
+    imagen: "🖥️",
+  },
+  {
+    id: 5,
+    nombre: "Cafetera espresso semiautomática",
+    marca: "Breville",
+    categoria: "Hogar",
+    precio: 549.95,
+    precioAnterior: null,
+    rating: 4.7,
+    resenas: 3308,
+    envioGratis: true,
+    imagen: "☕",
+  },
+  {
+    id: 6,
+    nombre: "Silla de escritorio con soporte lumbar",
+    marca: "Hbada",
+    categoria: "Hogar",
+    precio: 159.99,
+    precioAnterior: 199.99,
+    rating: 4.1,
+    resenas: 674,
+    envioGratis: false,
+    imagen: "🪑",
+  },
+  {
+    id: 7,
+    nombre: "Lámpara de escritorio LED regulable",
+    marca: "TaoTronics",
+    categoria: "Hogar",
+    precio: 42.99,
+    precioAnterior: null,
+    rating: 4.4,
+    resenas: 1580,
+    envioGratis: true,
+    imagen: "💡",
+  },
+  {
+    id: 8,
+    nombre: "Mochila antirrobo para laptop 15.6\"",
+    marca: "Matein",
+    categoria: "Accesorios",
+    precio: 39.99,
+    precioAnterior: 59.99,
+    rating: 4.2,
+    resenas: 8905,
+    envioGratis: true,
+    imagen: "🎒",
+  },
+  {
+    id: 9,
+    nombre: "Reloj inteligente con GPS y oxímetro",
+    marca: "Garmin",
+    categoria: "Accesorios",
+    precio: 199.0,
+    precioAnterior: 249.0,
+    rating: 4.6,
+    resenas: 5602,
+    envioGratis: true,
+    imagen: "⌚",
+  },
+  {
+    id: 10,
+    nombre: "Termo de acero inoxidable 1 litro",
+    marca: "Hydro Flask",
+    categoria: "Accesorios",
+    precio: 44.95,
+    precioAnterior: null,
+    rating: 4.9,
+    resenas: 12045,
+    envioGratis: false,
+    imagen: "🧴",
+  },
+];
+
+// CONCEPTO 2: MÓDULOS de Node (CommonJS).
+// Cada archivo .js en Node es un módulo privado: nada sale de aquí
+// a menos que lo exportes explícitamente.
+module.exports = productos;

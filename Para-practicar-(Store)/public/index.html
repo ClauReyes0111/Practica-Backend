@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Store · Buscar productos</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+
+  <header class="barra">
+    <div class="barra__interior">
+      <a class="logo" href="/">Store<span>.</span></a>
+
+      <!-- El buscador. Sin <form> para manejar todo con JavaScript. -->
+      <div class="buscador">
+        <input
+          id="busqueda"
+          type="search"
+          placeholder="Buscar teclado, audífonos, cafetera…"
+          autocomplete="off"
+          aria-label="Buscar productos"
+        />
+        <button id="btn-buscar" class="buscador__boton" aria-label="Buscar">Buscar</button>
+      </div>
+
+      <button id="btn-carrito" class="carrito">
+        <span class="carrito__icono">🛒</span>
+        <span id="contador-carrito" class="carrito__contador">0</span>
+        <span class="carrito__texto">Carrito</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="contenido">
+    <!-- Esta línea la reescribe JavaScript con el conteo real -->
+    <p id="resumen" class="resumen">Cargando productos…</p>
+
+    <!-- Contenedor VACÍO a propósito: JavaScript lo llena -->
+    <section id="resultados" class="resultados"></section>
+  </main>
+
+  <!-- Avisito que aparece al agregar algo al carrito -->
+  <div id="aviso" class="aviso" role="status" aria-live="polite"></div>
+
+  <!-- El JS va al final: así el HTML ya existe cuando el script corre -->
+  <script src="/app.js"></script>
+</body>
+</html>

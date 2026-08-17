@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mercadito · Tu carrito</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+
+  <header class="barra">
+    <div class="barra__interior">
+      <a class="logo" href="/">Store<span>.</span></a>
+      <!-- Acá no hay buscador: esta pantalla es solo del carrito -->
+    </div>
+  </header>
+
+  <main class="contenido">
+    <h1>Tu carrito</h1>
+
+    <!-- Contenedor VACÍO a propósito: JavaScript lo llena -->
+    <section id="lineas-carrito"></section>
+
+    <!-- Esta línea la reescribe JavaScript con el total real -->
+    <p id="total-carrito" class="resumen"></p>
+  </main>
+
+  <!-- El JS va al final: así el HTML ya existe cuando el script corre -->
+  <script src="carrito.js"></script>
+</body>
+</html>

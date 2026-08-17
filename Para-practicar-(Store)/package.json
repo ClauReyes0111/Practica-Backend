@@ -1,0 +1,13 @@
+{
+  "name": "tienda",
+  "version": "1.0.0",
+  "description": "Tienda de aprendizaje: pantalla de resultados + carrito",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": ["node", "javascript", "aprendizaje"],
+  "author": "",
+  "license": "MIT"
+}
