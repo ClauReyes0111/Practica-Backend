@@ -7,7 +7,10 @@
     "start": "node server.js",
     "dev": "node --watch server.js"
   },
-  "keywords": ["node", "javascript", "aprendizaje"],
+  "keywords": ["node", "javascript", "express", "aprendizaje"],
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
 }
