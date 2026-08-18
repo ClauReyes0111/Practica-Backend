@@ -15,7 +15,7 @@ const path = require("path");
 
 const productos = require("./productos");
 
-const PUERTO = 3000;
+const PUERTO = process.env.PORT || 3000;
 
 const CARPETA_PUBLICA = path.join(__dirname, "public");
 
