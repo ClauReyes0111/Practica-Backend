@@ -1,5 +1,3 @@
-// ---------- 1. Referencias al HTML (el DOM) ----------
-// document.querySelector busca con selectores de CSS: "#id", ".clase"
 const $busqueda = document.querySelector("#busqueda");
 const $btnBuscar = document.querySelector("#btn-buscar");
 const $resultados = document.querySelector("#resultados");
@@ -8,21 +6,12 @@ const $contadorCarrito = document.querySelector("#contador-carrito");
 const $aviso = document.querySelector("#aviso");
 const $btnCarrito = document.querySelector("#btn-carrito");
 
-// ---------- 2. El ESTADO de la app ----------
-// Regla de oro: el estado manda, la pantalla solo lo refleja.
-// Cambio el estado → vuelvo a pintar. Nunca al revés.
-let productosVisibles = []; // lo último que respondió el servidor
+let productosVisibles = []; 
 
-// CONCEPTO 20: al arrancar, en vez de empezar siempre vacío,
-// preguntamos si el navegador tiene algo guardado de una visita anterior.
-// localStorage.getItem() devuelve el TEXTO guardado, o null si nunca se guardó nada.
-// JSON.parse() convierte ese texto de vuelta en array/objeto de JS.
-// El "|| []" es un salvavidas: si getItem devuelve null, usamos un array vacío
-// en lugar de que JSON.parse explote intentando parsear "null" de forma rara.
+
 let carrito = JSON.parse(localStorage.getItem("carrito")) || []; // [{ id, nombre, precio, cantidad }]
 
-// ---------- 3. Pedirle datos al servidor ----------
-// async/await: "espera este resultado, pero no congeles el navegador".
+
 async function buscarProductos(termino = "") {
   try {
     // fetch hace la petición HTTP. encodeURIComponent evita romper la URL
@@ -47,7 +36,7 @@ async function buscarProductos(termino = "") {
   }
 }
 
-// ---------- 4. Pintar en pantalla ----------
+//Pintar en pantalla
 function pintarResumen({ termino, total }) {
   $resumen.innerHTML = termino
     ? `<strong>${total}</strong> resultado${total === 1 ? "" : "s"} para “${termino}”`
@@ -166,7 +155,7 @@ function mostrarAviso(texto) {
   temporizadorAviso = setTimeout(() => $aviso.classList.remove("visible"), 2200);
 }
 
-// ---------- 6. Eventos ----------
+// Eventos
 // DELEGACIÓN: los botones "Agregar" se crean y destruyen todo el tiempo,
 // así que escuchamos en el CONTENEDOR, que sí es permanente.
 $resultados.addEventListener("click", (evento) => {
@@ -204,17 +193,11 @@ $busqueda.addEventListener("input", () => {
   temporizadorBusqueda = setTimeout(() => buscarProductos($busqueda.value), 300);
 });
 
-// CONCEPTO 23: navegar a otra página desde JavaScript.
-// window.location.href = "..." es lo mismo que si escribieras esa URL
-// en la barra de direcciones: el navegador RECARGA hacia esa página nueva.
+
 $btnCarrito.addEventListener("click", () => {
   window.location.href = "carrito.html";
 });
 
-// ---------- 7. Arranque ----------
-// CONCEPTO 22: el estado (carrito) ya se recuperó de localStorage al declarar
-// la variable, pero la PANTALLA (el número en la barra) no se entera sola.
-// Hay que forzar un primer "reflejo" al arrancar, igual que hacemos
-// cada vez que el carrito cambia.
+
 actualizarContador();
 buscarProductos();
