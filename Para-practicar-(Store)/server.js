@@ -1,19 +1,18 @@
 // ============================================================
 //  server.js  →  El BACKEND. Esto corre en Node, NO en el navegador.
-//  Ahora usando Express: un framework que nos ahorra escribir a mano
-//  el enrutamiento y el manejo de archivos estáticos que antes hacíamos
-//  con el módulo nativo "http".
+//  Usa Express para las rutas y Mongoose para hablar con MongoDB.
 // ============================================================
 //
 // CONCEPTO 3: require() carga módulos.
-//   - "express" es una dependencia externa (vive en node_modules,
-//     por eso NO lleva ./ adelante).
+//   - "express" es una dependencia externa (vive en node_modules).
 //   - "path" viene incluido en Node (módulo nativo).
-//   - "./productos" es NUESTRO archivo (por eso lleva ./).
+//   - "dotenv" lee el archivo .env y mete sus valores en process.env.
 const express = require("express");
 const path = require("path");
+require("dotenv").config();
 
-const productos = require("./productos");
+const conectarDB = require("./db");
+const Producto = require("./models/Producto");
 
 const PUERTO = process.env.PORT || 3000;
 
@@ -32,24 +31,49 @@ app.use((peticion, respuesta, next) => {
   next();
 });
 
+// CONCEPTO 11: escapamos los caracteres especiales de regex antes de
+// meter lo que escribió el usuario en un new RegExp(). Si no lo
+// hiciéramos, alguien podría escribir algo como "(a+)+$" y colgar al
+// servidor calculando esa expresión (se llama ataque ReDoS).
+function escaparRegExp(texto) {
+  return texto.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
 // ---------- RUTA 1: la API ----------
-app.get("/api/productos", (peticion, respuesta) => {
-  // ?q=teclado  →  peticion.query.q  →  "teclado"
-  const q = (peticion.query.q || "").trim().toLowerCase();
+// CONCEPTO 12: async/await también funciona en rutas de Express. Si
+// la promesa de Mongo se rechaza, el try/catch la atrapa y se la
+// pasamos a next(error) para que la maneje el middleware de errores.
+app.get("/api/productos", async (peticion, respuesta, next) => {
+  try {
+    // ?q=teclado  →  peticion.query.q  →  "teclado"
+    const q = (peticion.query.q || "").trim();
 
-  // CONCEPTO 5: .filter() recorre el array y se queda solo con los
-  // elementos donde la función devuelve true. NO modifica el original.
-  const resultados = q
-    ? productos.filter((producto) => {
-        const texto = `${producto.nombre} ${producto.marca} ${producto.categoria}`.toLowerCase();
-        return texto.includes(q);
-      })
-    : productos;
+    // CONCEPTO 13: en vez de .filter() sobre un array en memoria,
+    // armamos un FILTRO de Mongo. $or dice "que cumpla al menos una
+    // de estas condiciones"; el RegExp con "i" es "sin importar
+    // mayúsculas/minúsculas" (equivalente a nuestro .toLowerCase() de antes).
+    const filtro = q
+      ? {
+          $or: [
+            { nombre: new RegExp(escaparRegExp(q), "i") },
+            { marca: new RegExp(escaparRegExp(q), "i") },
+            { categoria: new RegExp(escaparRegExp(q), "i") },
+          ],
+        }
+      : {};
 
-  // CONCEPTO 6: JSON es el idioma común entre backend y frontend.
-  // res.json() arma la respuesta con el Content-Type correcto y
-  // convierte el objeto a texto JSON por nosotros.
-  respuesta.json({ termino: q, total: resultados.length, resultados });
+    // .select("-_id -__v") oculta los campos internos de Mongo que el
+    // frontend no necesita. .lean() devuelve objetos planos de JS en
+    // vez de "documentos" de Mongoose (más liviano para solo leer).
+    const resultados = await Producto.find(filtro).select("-_id -__v").lean();
+
+    // CONCEPTO 6: JSON es el idioma común entre backend y frontend.
+    // res.json() arma la respuesta con el Content-Type correcto y
+    // convierte el objeto a texto JSON por nosotros.
+    respuesta.json({ termino: q.toLowerCase(), total: resultados.length, resultados });
+  } catch (error) {
+    next(error);
+  }
 });
 
 // ---------- RUTA 2: archivos estáticos (html, css, js del navegador) ----------
@@ -65,6 +89,25 @@ app.use((peticion, respuesta) => {
   respuesta.status(404).type("text/plain; charset=utf-8").send("404 · Esa página no existe");
 });
 
-app.listen(PUERTO, () => {
-  console.log(`\n  Tienda corriendo en → http://localhost:${PUERTO}\n`);
+// ---------- RUTA 4: manejo de errores ----------
+// CONCEPTO 14: un middleware con 4 parámetros (el primero es el error)
+// es lo que Express reconoce como manejador de errores. Cualquier
+// next(error) de arriba termina acá, en vez de tumbar el servidor.
+app.use((error, peticion, respuesta, next) => {
+  console.error(error);
+  respuesta.status(500).json({ error: "Algo falló en el servidor" });
 });
+
+// CONCEPTO 15: nos conectamos a Mongo ANTES de aceptar peticiones. Si
+// la base no está disponible, preferimos que el servidor ni arranque
+// a que arranque y falle ruta por ruta.
+conectarDB()
+  .then(() => {
+    app.listen(PUERTO, () => {
+      console.log(`\n  Tienda corriendo en → http://localhost:${PUERTO}\n`);
+    });
+  })
+  .catch((error) => {
+    console.error("  No se pudo conectar a MongoDB:", error.message);
+    process.exit(1);
+  });
