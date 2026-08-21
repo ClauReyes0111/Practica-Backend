@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Store · Panel de productos</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+
+  <header class="barra">
+    <div class="barra__interior">
+      <a class="logo" href="/">Store<span>.</span></a>
+      <a class="enlace-admin" href="/">← Volver a la tienda</a>
+    </div>
+  </header>
+
+  <main class="contenido admin">
+    <h1>Panel de productos</h1>
+
+    <!-- Un solo formulario sirve para AGREGAR y para EDITAR: el campo
+         oculto "producto-id" es lo que decide en cuál de los dos modos
+         estamos (ver CONCEPTO 30 en admin.js). -->
+    <form id="form-producto" class="form-producto">
+      <input type="hidden" id="campo-id" value="" />
+
+      <div class="form-grid">
+        <label>Nombre
+          <input type="text" id="campo-nombre" required />
+        </label>
+        <label>Marca
+          <input type="text" id="campo-marca" required />
+        </label>
+        <label>Categoría
+          <input type="text" id="campo-categoria" required />
+        </label>
+        <label>Precio
+          <input type="number" step="0.01" min="0" id="campo-precio" required />
+        </label>
+        <label>Precio anterior (opcional)
+          <input type="number" step="0.01" min="0" id="campo-precioAnterior" />
+        </label>
+        <label>Rating (0 a 5)
+          <input type="number" step="0.1" min="0" max="5" id="campo-rating" required />
+        </label>
+        <label>Reseñas
+          <input type="number" step="1" min="0" id="campo-resenas" required />
+        </label>
+        <label>Imagen (un emoji)
+          <input type="text" id="campo-imagen" maxlength="4" placeholder="📦" />
+        </label>
+        <label class="checkbox">
+          <input type="checkbox" id="campo-envioGratis" />
+          Envío gratis
+        </label>
+      </div>
+
+      <div class="form-acciones">
+        <button type="submit" id="btn-guardar">Agregar producto</button>
+        <button type="button" id="btn-cancelar" hidden>Cancelar edición</button>
+      </div>
+
+      <p id="form-error" class="form-error"></p>
+    </form>
+
+    <div class="tabla-envoltorio">
+      <table class="tabla-productos">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Nombre</th>
+            <th>Marca</th>
+            <th>Categoría</th>
+            <th>Precio</th>
+            <th>Rating</th>
+            <th>Envío</th>
+            <th></th>
+          </tr>
+        </thead>
+        <!-- Vacío a propósito: admin.js lo llena -->
+        <tbody id="cuerpo-tabla"></tbody>
+      </table>
+    </div>
+  </main>
+
+  <script src="/admin.js"></script>
+</body>
+</html>

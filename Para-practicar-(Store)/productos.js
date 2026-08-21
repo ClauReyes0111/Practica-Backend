@@ -1,11 +1,3 @@
-// ============================================================
-//  productos.js  →  Nuestro "catálogo" (por ahora, datos en memoria)
-// ============================================================
-//
-// CONCEPTO 1: un ARRAY de OBJETOS.
-//   - Un objeto es un conjunto de pares  clave: valor   → { nombre: "Teclado" }
-//   - Un array es una lista ordenada     → [ {...}, {...}, {...} ]
-//   Esta es LA estructura de datos que vas a usar el 90% del tiempo en JS.
 
 const productos = [
   {

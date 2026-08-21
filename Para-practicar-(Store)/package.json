@@ -5,12 +5,15 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node --watch server.js"
+    "dev": "node --watch server.js",
+    "seed": "node seed.js"
   },
-  "keywords": ["node", "javascript", "express", "aprendizaje"],
+  "keywords": ["node", "javascript", "express", "mongodb", "mongoose", "aprendizaje"],
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.19.2"
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.5.1"
   }
 }
