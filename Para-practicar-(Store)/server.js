@@ -31,7 +31,7 @@ app.use((peticion, respuesta, next) => {
   next();
 });
 
-// CONCEPTO 11: escapamos los caracteres especiales de regex antes de
+// CONCEPTO 5: escapamos los caracteres especiales de regex antes de
 // meter lo que escribió el usuario en un new RegExp(). Si no lo
 // hiciéramos, alguien podría escribir algo como "(a+)+$" y colgar al
 // servidor calculando esa expresión (se llama ataque ReDoS).
@@ -40,15 +40,15 @@ function escaparRegExp(texto) {
 }
 
 // ---------- RUTA 1: la API ----------
-// CONCEPTO 12: async/await también funciona en rutas de Express. Si
-// la promesa de Mongo se rechaza, el try/catch la atrapa y se la
-// pasamos a next(error) para que la maneje el middleware de errores.
+// CONCEPTO 6: async/await también funciona en rutas de Express. Si la
+// promesa de Mongo se rechaza, el try/catch la atrapa y se la pasamos
+// a next(error) para que la maneje el middleware de errores de abajo.
 app.get("/api/productos", async (peticion, respuesta, next) => {
   try {
     // ?q=teclado  →  peticion.query.q  →  "teclado"
     const q = (peticion.query.q || "").trim();
 
-    // CONCEPTO 13: en vez de .filter() sobre un array en memoria,
+    // CONCEPTO 7: en vez de .filter() sobre un array en memoria,
     // armamos un FILTRO de Mongo. $or dice "que cumpla al menos una
     // de estas condiciones"; el RegExp con "i" es "sin importar
     // mayúsculas/minúsculas" (equivalente a nuestro .toLowerCase() de antes).
@@ -67,7 +67,7 @@ app.get("/api/productos", async (peticion, respuesta, next) => {
     // vez de "documentos" de Mongoose (más liviano para solo leer).
     const resultados = await Producto.find(filtro).select("-_id -__v").lean();
 
-    // CONCEPTO 6: JSON es el idioma común entre backend y frontend.
+    // CONCEPTO 8: JSON es el idioma común entre backend y frontend.
     // res.json() arma la respuesta con el Content-Type correcto y
     // convierte el objeto a texto JSON por nosotros.
     respuesta.json({ termino: q.toLowerCase(), total: resultados.length, resultados });
@@ -77,7 +77,7 @@ app.get("/api/productos", async (peticion, respuesta, next) => {
 });
 
 // ---------- RUTA 2: archivos estáticos (html, css, js del navegador) ----------
-// CONCEPTO 7: express.static reemplaza todo el bloque de fs.readFile +
+// CONCEPTO 9: express.static reemplaza todo el bloque de fs.readFile +
 // mapa de Content-Type + candado anti path-traversal que teníamos antes.
 // Express ya sabe servir archivos de una carpeta, con el tipo MIME
 // correcto, y sirve "index.html" automáticamente para "/".
@@ -90,7 +90,7 @@ app.use((peticion, respuesta) => {
 });
 
 // ---------- RUTA 4: manejo de errores ----------
-// CONCEPTO 14: un middleware con 4 parámetros (el primero es el error)
+// CONCEPTO 10: un middleware con 4 parámetros (el primero es el error)
 // es lo que Express reconoce como manejador de errores. Cualquier
 // next(error) de arriba termina acá, en vez de tumbar el servidor.
 app.use((error, peticion, respuesta, next) => {
@@ -98,7 +98,7 @@ app.use((error, peticion, respuesta, next) => {
   respuesta.status(500).json({ error: "Algo falló en el servidor" });
 });
 
-// CONCEPTO 15: nos conectamos a Mongo ANTES de aceptar peticiones. Si
+// CONCEPTO 11: nos conectamos a Mongo ANTES de aceptar peticiones. Si
 // la base no está disponible, preferimos que el servidor ni arranque
 // a que arranque y falle ruta por ruta.
 conectarDB()

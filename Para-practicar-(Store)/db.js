@@ -2,13 +2,13 @@
 //  db.js → Conexión a MongoDB usando Mongoose
 // ============================================================
 //
-// CONCEPTO 8: Mongoose es un ODM (Object-Document Mapper): traduce
+// CONCEPTO 12: Mongoose es un ODM (Object-Document Mapper): traduce
 // entre documentos de MongoDB y objetos/clases de JavaScript, y nos
 // deja definir un "Schema" (la forma que deben tener los documentos)
 // en vez de escribir consultas sueltas a mano.
 const mongoose = require("mongoose");
 
-// CONCEPTO 9: mongoose.connect() devuelve una PROMESA. La función es
+// CONCEPTO 13: mongoose.connect() devuelve una PROMESA. La función es
 // async para poder usar await y que quien la llame sepa cuándo
 // terminó de conectar (o si falló).
 async function conectarDB() {
